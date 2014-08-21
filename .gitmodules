@@ -1,0 +1,6 @@
+[submodule "externals/qlog"]
+	path = externals/qlog
+	url = git@github.com:PaulHowes/qlog.git
+[submodule "externals/asf"]
+	path = externals/asf
+	url = git@github.com:PaulHowes/asf.git
