@@ -15,28 +15,28 @@ namespace webby {
   class server;
 
   /**
-   * @brief Exception object used for response errors.
-   */
-  class response_error : public std::runtime_error {
-    public:
-      /**
-       * @brief Constructs the `webby::response_error` object.
-       * @param[in] what_arg Explanatory string.
-       */
-      explicit response_error(const std::string& what_arg) : runtime_error(what_arg) { }
-
-      /**
-       * @brief Constructs the `webby::response_error` object.
-       * @param[in] what_arg Explanatory string.
-       */
-      explicit response_error(const char* what_arg) : runtime_error(what_arg) { }
-  };
-
-  /**
    * @brief Encapsulates the response sent back to the connected host.
    */
   class response {
     public:
+      /**
+       * @brief Exception object used for response errors.
+       */
+      class error : public std::runtime_error {
+        public:
+          /**
+           * @brief Constructs the `response::error` object.
+           * @param[in] what_arg Explanatory string.
+           */
+          explicit error(const std::string& what_arg) : runtime_error(what_arg) { }
+
+          /**
+           * @brief Constructs the `response::error` object.
+           * @param[in] what_arg Explanatory string.
+           */
+          explicit error(const char* what_arg) : runtime_error(what_arg) { }
+      };
+
       /**
        * @brief Sets a header value.
        * @param[in] name Name of the header.
@@ -91,7 +91,7 @@ namespace webby {
        *
        * When response::write_block() is invoked for the first time all of the headers are
        * transmitted to the connected host. If the `Content-Length` header was not set, then a
-       * webby::response_error exception is thrown. The `Content-Length` header is not mandatory,
+       * webby::response::error exception is thrown. The `Content-Length` header is not mandatory,
        * but has become a de-facto standard, and is enforced.
        */
       void write_block(const unsigned char* data, const unsigned long length) {
@@ -100,7 +100,7 @@ namespace webby {
         // Sends the headers if necessary.
         if(!_sent_headers) {
           if(_header.count("Content-Length") == 0) {
-            throw response_error("The Content-Length header was not provided.");
+            throw response::error("The Content-Length header was not provided.");
           }
           send_headers();
         }
