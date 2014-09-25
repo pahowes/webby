@@ -1,9 +1,10 @@
 /**
- * @file
+ * @file config.hpp
  */
 #pragma once
 
 #include <qlog.hpp>
+#include <memory>
 #include <string>
 
 /**
@@ -19,11 +20,9 @@ namespace webby {
        * @brief Default constructor.
        */
       config() : _address("localhost"),
-                 _port(8080) {
-        qlog::logger al(std::cout);
-        _access_log = &al;
-        qlog::logger el(std::cerr);
-        _error_log = &el;
+                 _port(8000),
+                 _access_log(new qlog::logger(std::cout, qlog::severity::DEBUG)),
+                 _error_log(new qlog::logger(std::cerr, qlog::severity::DEBUG)) {
       }
 
       /**
@@ -91,8 +90,8 @@ namespace webby {
        * @param[in] log Access log stream.
        * @returns a references to this `webby::config` instance to allow for chaining.
        */
-      config& set_access_log(const qlog::logger& log) {
-        _access_log = const_cast<qlog::logger*>(&log);
+      config& set_access_log(std::unique_ptr<qlog::logger>& log) {
+        _access_log = std::move(log);
         return *this;
       }
 
@@ -109,8 +108,8 @@ namespace webby {
        * @param[in] log Error log stream.
        * @returns a references to this `webby::config` instance to allow for chaining.
        */
-      config& set_error_log(const qlog::logger& log) {
-        _error_log = const_cast<qlog::logger*>(&log);
+      config& set_error_log(std::unique_ptr<qlog::logger>& log) {
+        _error_log = std::move(log);
         return *this;
       }
 
@@ -118,19 +117,13 @@ namespace webby {
       /// Hostname or IPv4 address the server listens on. Defaults to `localhost`.
       std::string _address;
 
-      /// Access log location.
-      qlog::logger* _access_log;
-
-      /// Error log location.
-      qlog::logger* _error_log;
-
       /// Port the server listens on. Defaults to `80`.
       unsigned short _port;
 
-      // There should be only one active configuration. Disabling the copy and move constructors
-      // as well as the assignment operator help to enforce this.
-      config(const config&) = delete;
-      config(const config&&) = delete;
-      void operator=(const config&) = delete;
+      /// Access log location.
+      std::unique_ptr<qlog::logger> _access_log;
+
+      /// Error log location.
+      std::unique_ptr<qlog::logger> _error_log;
   };
 }

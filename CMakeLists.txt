@@ -48,6 +48,7 @@ endif(DOXYGEN_FOUND)
 #
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/externals/asf/include
   ${CMAKE_CURRENT_SOURCE_DIR}/externals/qlog/include
   )
 
