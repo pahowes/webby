@@ -17,21 +17,6 @@ namespace webby {
   class config {
     public:
       /**
-       * @brief Default constructor.
-       */
-      config() : _address("localhost"),
-                 _port(8000),
-                 _access_log(new qlog::logger(std::cout, qlog::severity::DEBUG)),
-                 _error_log(new qlog::logger(std::cerr, qlog::severity::DEBUG)) {
-      }
-
-      /**
-       * @brief Destructor
-       */
-      ~config() {
-      }
-
-      /**
        * @brief Gets the server address.
        * @returns current server address.
        */
