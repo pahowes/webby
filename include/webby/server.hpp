@@ -12,48 +12,39 @@
 
 namespace webby {
   /**
-   * @brief Exception object used for fatal server errors.
-   *
-   * The `webby::server_error` class represents fatal errors encountered by `webby::server` that
-   * cannot be recovered from.
-   */
-  class server_error : public std::runtime_error {
-    public:
-      /**
-       * @brief Constructs the `webby::server_error` object.
-       * @param[in] what_arg Explanatory string.
-       */
-      explicit server_error(const std::string& what_arg) : runtime_error(what_arg) { }
-
-      /**
-       * @brief Constructs the `webby::server_error` object.
-       * @param[in] what_arg Explanatory string.
-       */
-      explicit server_error(const char* what_arg) : runtime_error(what_arg) { }
-  };
-
-  /**
    * @brief Server object that the client interacts with.
    */
   class server {
     public:
       /**
-       * @brief Default constructor
+       * @brief Exception object used for fatal server errors.
+       *
+       * The `webby::server::error` class represents fatal errors encountered by `webby::server`
+       * that cannot be recovered from.
        */
-      server() : _config(std::move(webby::config())), _router(std::move(webby::router())) {
-        _config.error_log() << qlog::debug << "server::server()" << std::endl;
-        try {
-          init();
-        }
-        catch(const webby::server_error& e) {
-          _config.error_log() << qlog::error << e.what() << std::endl;
-          throw;
-        }
-      }
+      class error : public std::runtime_error {
+        public:
+          /**
+           * @brief Constructs the `webby::server::error` object.
+           * @param[in] what_arg Explanatory string.
+           */
+          explicit error(const std::string& what_arg) : runtime_error(what_arg) { }
+
+          /**
+           * @brief Constructs the `webby::server::error` object.
+           * @param[in] what_arg Explanatory string.
+           */
+          explicit error(const char* what_arg) : runtime_error(what_arg) { }
+      };
 
       /**
-       * @brief Constructor that accepts a server configuration.
+       * @brief Constructor that accepts a server configuration and router.
        * @param[in] config Server configuration.
+       * @param[in] router Request router.
+       *
+       * The configuration structure defines what hostname and port the server will listen on, and
+       * provides loggers for errors and client access. The router is used to determine how each
+       * request is handled, or if an error is sent back to the client.
        */
       server(const webby::config& config, const webby::router& router)
             : _config(config), _router(router) {
@@ -62,7 +53,7 @@ namespace webby {
         try {
           init();
         }
-        catch(const webby::server_error& e) {
+        catch(const webby::server::error& e) {
           _config.error_log() << qlog::error << e.what() << std::endl;
           throw;
         }
