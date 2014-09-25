@@ -1,6 +1,7 @@
 /**
  * @file router.hpp
  */
+#pragma once
 
 /**
  * @namespace webby
