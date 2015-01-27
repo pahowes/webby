@@ -23,10 +23,13 @@ elseif("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
 endif()
 
 #
-# Dependency on Boost 1.55 due to ASF
+# If `git` is installed locally, perform an automatic update of submodules.
 #
-find_package(Boost 1.55 REQUIRED)
-include_directories(Boost_INCLUDE_DIRS)
+find_package(Git)
+if(GIT_FOUND)
+  message("Updating Git submodules with ${GIT_EXECUTABLE} ${GIT_VERSION_STRING}")
+  execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive)
+endif(GIT_FOUND)
 
 #
 # Use `make doc` to generate API documentation.
