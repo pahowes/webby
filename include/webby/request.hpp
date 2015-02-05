@@ -85,7 +85,7 @@ namespace webby {
        */
       unsigned read_block(char* buffer, const size_t length, const bool peek = false) const {
         _config.error_log() << qlog::debug << "request::read_block()" << std::endl;
-        return _worker.read_block(buffer, length, peek);
+        return _worker.read(buffer, length, peek);
       }
 
     protected:

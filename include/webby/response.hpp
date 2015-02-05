@@ -106,7 +106,8 @@ namespace webby {
         }
 
         // Send the data to the connected host.
-        _worker.write_block(data, length);
+        _worker.write(data, length);
+        _bytes_sent += length;
       }
 
     protected:
@@ -115,7 +116,7 @@ namespace webby {
        * @param[in] worker Worker socket used to communicate with the connected host.
        */
       response(const webby::config& config, const net::worker& worker) :
-          _config(config), _sent_headers(false), _worker(worker), _version("1.1") {
+          _config(config), _sent_headers(false), _worker(worker), _version("1.1"), _bytes_sent(0) {
         _config.error_log() << qlog::debug << "response::response()" << std::endl;
       }
 
@@ -164,7 +165,7 @@ namespace webby {
         res << "\r\n";
 
         const std::string& str = res.str();
-        _worker.write_block(str.c_str(), str.length());
+        _worker.write(str.c_str(), str.length());
 
         // Flag that the headers have been sent.
         _sent_headers = true;
@@ -205,6 +206,11 @@ namespace webby {
        * @brief HTTP version sent to the connected host.
        */
       std::string _version;
+
+      /**
+       * @brief Number of bytes sent to the client.
+       */
+      unsigned long _bytes_sent;
 
       /**
        * @brief Necessary so that webby::server can call the send function.

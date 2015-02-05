@@ -3,7 +3,8 @@
  */
 #pragma once
 
-#include <net/socket.hpp>
+#include <asf.hpp>
+#include <net.hpp>
 
 #include <webby/config.hpp>
 #include <webby/request.hpp>
@@ -116,7 +117,9 @@ namespace webby {
        */
       void init() {
         _config.error_log() << qlog::debug << "server::init()" << std::endl;
-        _server.create(_config.address(), _config.port());
+        _server.connect(_config.address(), _config.port());
+        _config.error_log() << qlog::info << "Server listening at " << _config.address() << ":"
+          << _config.port() << std::endl;
       }
 
       /**

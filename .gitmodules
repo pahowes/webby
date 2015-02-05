@@ -4,3 +4,9 @@
 [submodule "externals/asf"]
 	path = externals/asf
 	url = git@github.com:PaulHowes/asf.git
+[submodule "externals/net"]
+	path = externals/net
+	url = git@github.com:PaulHowes/net.git
+[submodule "externals/mapped"]
+	path = externals/mapped
+	url = git@github.com:PaulHowes/mapped.git
