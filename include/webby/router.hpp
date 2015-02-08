@@ -18,6 +18,9 @@ namespace webby {
        */
       typedef std::function<void(const request& ,response&)> handler_t;
 
+      /**
+       * @brief Default constructor.
+       */
       router() {
         _error_handler = router::default_error_handler;
       }
@@ -41,7 +44,6 @@ namespace webby {
             }
             else {
               res.set_status_code(405)
-                 .set_reason("Method not allowed")
                  .set_header("Allow", to_string(itr->mask));
             }
             return;
@@ -75,13 +77,12 @@ namespace webby {
        */
       static void default_error_handler(const request& req, response& res) {
         (void)(req);
-        res.set_status_code(404)
-           .set_reason("Not Found");
+        res.set_status_code(404);
       }
 
     private:
       /**
-       * @brief Stores information about the route.
+       * @brief The structure of a route.
        */
       struct route {
         /**

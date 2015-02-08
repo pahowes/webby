@@ -9,12 +9,15 @@ if("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
                   -stdlib=libc++
                   -Weverything
                   -Wno-c++98-compat
+                  -Wno-padded
                   -Wno-documentation-unknown-command
                   -Wno-missing-prototypes
                   -Wno-missing-noreturn
-                  -Wno-padded
                   -Wno-unreachable-code
-                  -Wno-weak-vtables)
+                  -Wno-weak-vtables
+                  -Wno-exit-time-destructors
+                  -Wno-global-constructors
+                  )
 elseif("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
   add_definitions(-std=c++11
                   -Wall

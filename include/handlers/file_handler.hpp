@@ -26,18 +26,15 @@ namespace webby {
           mapped::file mf(path);
           mapped::buffer_t b = mf.map();
           res.set_status_code(200)
-             .set_reason("OK")
              .set_header("Content-Length", std::to_string(b.second))
              .write_block(reinterpret_cast<unsigned char const*>(b.first), b.second);
         }
         catch(std::system_error const& ex) {
           if(ex.code().value() == 2) {
-            res.set_status_code(404)
-               .set_reason("Not found");
+            res.set_status_code(404);
           }
           else {
-            res.set_status_code(500)
-               .set_reason("Internal server error");
+            res.set_status_code(500);
           }
         }
       }
