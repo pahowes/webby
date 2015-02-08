@@ -1,9 +1,14 @@
 #pragma once
 
 #include <mapped_file.hpp>
-#include <webby/method.hpp>
 
+/**
+ * @namespace webby
+ */
 namespace webby {
+  /**
+   * @brief Serves static files from disk.
+   */
   class file_handler {
     public:
       /**

@@ -62,33 +62,6 @@ include_directories(
   )
 
 #
-# Source files to compile for the library.
-#
-#set(
-#  LIBRARY_SOURCE
-#  ${CMAKE_CURRENT_SOURCE_DIR}/source/server.cpp
-#  ${CMAKE_CURRENT_SOURCE_DIR}/source/server_config.cpp
-#  ${CMAKE_CURRENT_SOURCE_DIR}/source/server_error.cpp
-#)
-
-#
-# Header files installed with the library.
-#
-#set(
-#  LIBRARY_HEADERS
-#  ${CMAKE_CURRENT_SOURCE_DIR}/include/server.hpp
-#  ${CMAKE_CURRENT_SOURCE_DIR}/include/server_config.hpp
-#  ${CMAKE_CURRENT_SOURCE_DIR}/include/server_error.hpp
-#  ${CMAKE_CURRENT_SOURCE_DIR}/include/webby.hpp
-#)
-
-#
-# Builds "libwebby.so", "libwebby.a", "webby.dll" or "webby.lib" depending on the compiler.
-#
-#add_library(webby_s STATIC ${LIBRARY_SOURCE})
-#add_library(webby   SHARED ${LIBRARY_SOURCE})
-
-#
 # Builds the test driver. This can be launched with either `make test` or `ctest`
 #
 enable_testing()

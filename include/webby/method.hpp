@@ -16,7 +16,8 @@ namespace webby {
     POST    = 0x20, ///< POST
     PUT     = 0x40, ///< PUT
     TRACE   = 0x80, ///< TRACE
-    CRUD    = 0x66, ///< Combination of DELETE, GET, POST, and PUT for web services.
+
+    REST    = 0x66, ///< Combination of DELETE, GET, POST, and PUT for RESTful web services.
     ALL     = 0xFF  ///< Match any method
   };
 

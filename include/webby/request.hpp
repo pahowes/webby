@@ -89,6 +89,21 @@ namespace webby {
         return _worker.read(buffer, length, peek);
       }
 
+      const std::string& route() const {
+        _config.error_log() << qlog::debug << "request::route()" << std::endl;
+        return _route;
+      }
+
+      /**
+       * @brief Sets the route that caused this request to be invoked.
+       * @param[in] route Route that caused this request to be invoked.
+       * @returns Reference to this webby::response object for chaining.
+       */
+      request& set_route(const std::string& route) {
+        _route = route;
+        return *this;
+      }
+
     protected:
 
       /**
@@ -281,6 +296,11 @@ namespace webby {
        * @brief Path of the request.
        */
       std::string _path;
+
+      /**
+       * @brief Route that caused the request to be invoked.
+       */
+      std::string _route;
 
       /**
        * @brief Headers.

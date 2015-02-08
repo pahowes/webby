@@ -36,10 +36,11 @@ namespace webby {
       /**
        * @brief Routes a request to the appropriate handler.
        */
-      void dispatch(const request& req, response& res) const {
+      void dispatch(request& req, response& res) const {
         for(auto itr = _route.cbegin(); itr != _route.cend(); ++itr) {
           if(req.path().compare(0, itr->path.length(), itr->path) == 0) {
             if(req.method() == (req.method() & itr->mask)) {
+              req.set_route(itr->path);
               itr->handler(req, res);
             }
             else {
