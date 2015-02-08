@@ -99,7 +99,7 @@ namespace webby {
           }
 
           // Routes the request to a handler.
-          _router.route(req, res);
+          _router.dispatch(req, res);
         }
       }
 

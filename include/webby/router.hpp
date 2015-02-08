@@ -2,6 +2,7 @@
  * @file router.hpp
  */
 #pragma once
+#include <vector>
 
 /**
  * @namespace webby
@@ -24,18 +25,25 @@ namespace webby {
       /**
        * @brief Adds a new route to the table.
        */
-      router& add(const std::string& path, handler_t handler) {
-        _route[path] = handler;
+      router& add(const std::string& path, enum webby::method mask, handler_t handler) {
+        _route.push_back(route{path, mask, handler});
         return *this;
       }
 
       /**
        * @brief Routes a request to the appropriate handler.
        */
-      void route(const webby::request& req, webby::response& res) const {
+      void dispatch(const request& req, response& res) const {
         for(auto itr = _route.cbegin(); itr != _route.cend(); ++itr) {
-          if(req.path().compare(0, itr->first.length(), itr->first) == 0) {
-            itr->second(req, res);
+          if(req.path().compare(0, itr->path.length(), itr->path) == 0) {
+            if(req.method() == (req.method() & itr->mask)) {
+              itr->handler(req, res);
+            }
+            else {
+              res.set_status_code(405)
+                 .set_reason("Method not allowed")
+                 .set_header("Allow", to_string(itr->mask));
+            }
             return;
           }
         }
@@ -73,9 +81,29 @@ namespace webby {
 
     private:
       /**
+       * @brief Stores information about the route.
+       */
+      struct route {
+        /**
+         * @brief base path to match.
+         */
+        std::string path;
+
+        /**
+         * @brief Mask of the HTTP methods that the route will accept.
+         */
+        enum webby::method mask;
+
+        /**
+         * @brief Function that handles processing for the route.
+         */
+        handler_t handler;
+      };
+
+      /**
        * @brief Stores routes and handlers.
        */
-      std::map<std::string, handler_t> _route;
+      std::vector<route> _route;
 
       /**
        * @brief Stores the error handler.

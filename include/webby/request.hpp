@@ -5,6 +5,7 @@
 #pragma once
 
 #include <map>
+#include <webby/method.hpp>
 #include <webby/utility.hpp>
 
 /**
@@ -60,7 +61,7 @@ namespace webby {
       /**
        * @brief Gets the request method, e.g. @c GET/POST/HEAD etc.
        */
-      const std::string& method() const {
+      webby::method method() const {
         _config.error_log() << qlog::debug << "request::method()" << std::endl;
         return _method;
       }
@@ -127,10 +128,35 @@ namespace webby {
         }
 
         // Stores the method.
-        _method = std::string(first, last);
+        std::string m = lowercase(std::string(first, last));
         first = last;
 
-        _config.error_log() << qlog::debug << "  Request Method: " << _method << std::endl;
+        if(m == "connect") {
+          _method = method::CONNECT;
+        }
+        else if(m == "delete") {
+          _method = method::DELETE;
+        }
+        else if(m == "get") {
+          _method = method::GET;
+        }
+        else if(m == "head") {
+          _method = method::HEAD;
+        }
+        else if(m == "options") {
+          _method = method::OPTIONS;
+        }
+        else if(m == "post") {
+          _method = method::POST;
+        }
+        else if(m == "put") {
+          _method = method::PUT;
+        }
+        else if(m == "trace") {
+          _method = method::TRACE;
+        }
+
+        _config.error_log() << qlog::debug << "  Request Method: " << m << std::endl;
 
         // Finds the first "/" character in the path.
         while(first != request_line.cend() && *first != '/') {
@@ -249,7 +275,7 @@ namespace webby {
       /**
        * @brief Request method.
        */
-      std::string _method;
+      webby::method _method;
 
       /**
        * @brief Path of the request.
